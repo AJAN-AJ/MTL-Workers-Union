@@ -233,11 +233,23 @@ export default function PresidingOfficerPage() {
         ) : (
           <ul className="space-y-2">
             {candidates.map((c) => (
-              <li key={c.id} className="bg-white border border-slate-200 rounded-lg px-4 py-3">
-                <p className="font-medium text-slate-900">{c.name}</p>
-                <p className="text-sm text-slate-500 mt-0.5">
-                  {c.candidate_positions.map((cp) => cp.positions.name).join(', ')}
-                </p>
+              <li key={c.id} className="bg-white border border-slate-200 rounded-lg px-4 py-3 flex items-center justify-between gap-3">
+                <div>
+                  <p className="font-medium text-slate-900">{c.name}</p>
+                  <p className="text-sm text-slate-500 mt-0.5">
+                    {c.candidate_positions.map((cp) => cp.positions.name).join(', ')}
+                  </p>
+                </div>
+                <button
+                  onClick={async () => {
+                    if (!confirm(`Remove ${c.name} from the candidate list?`)) return
+                    await fetch(`/api/po/candidates/${c.id}`, { method: 'DELETE' })
+                    loadData()
+                  }}
+                  className="text-sm text-red-600 flex-shrink-0"
+                >
+                  Remove
+                </button>
               </li>
             ))}
             {candidates.length === 0 && (
