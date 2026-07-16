@@ -54,7 +54,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
-              Employee ID
+              Employment number
             </label>
             <input
               type="text"
@@ -89,8 +89,7 @@ export default function LoginPage() {
               {error}
             </p>
           )}
-
-         <button
+<button
   type="submit"
   disabled={loading}
   className="w-full bg-blue-900 text-white font-medium py-2.5 rounded-lg hover:bg-blue-800 disabled:opacity-60 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"

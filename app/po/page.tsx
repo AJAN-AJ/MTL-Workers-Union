@@ -241,11 +241,16 @@ export default function PresidingOfficerPage() {
                   </p>
                 </div>
                 <button
-                  onClick={async () => {
-                    if (!confirm(`Remove ${c.name} from the candidate list?`)) return
-                    await fetch(`/api/po/candidates/${c.id}`, { method: 'DELETE' })
-                    loadData()
-                  }}
+                 onClick={async () => {
+  if (!confirm(`Remove ${c.name} from the candidate list?`)) return
+  const res = await fetch(`/api/po/candidates/${c.id}`, { method: 'DELETE' })
+  const data = await res.json()
+  if (!res.ok) {
+    setError(data.error)
+    return
+  }
+  loadData()
+}}
                   className="text-sm text-red-600 flex-shrink-0"
                 >
                   Remove
