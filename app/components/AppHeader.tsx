@@ -2,15 +2,17 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 type AppHeaderProps = {
   title: string
   subtitle?: string
   backHref?: string
+  showLogo?: boolean
 }
 
-export default function AppHeader({ title, subtitle, backHref }: AppHeaderProps) {
+export default function AppHeader({ title, subtitle, backHref, showLogo }: AppHeaderProps) {
   const router = useRouter()
   const [loggingOut, setLoggingOut] = useState(false)
 
@@ -25,7 +27,21 @@ export default function AppHeader({ title, subtitle, backHref }: AppHeaderProps)
   }
 
   return (
-    <div className="flex items-center justify-between gap-3 mb-6">
+    <div className="mb-6">
+      <div className="flex items-center gap-2 pb-3 mb-4 border-b border-slate-200">
+        <Image
+          src="/icon.png"
+          alt="MTL Workers Union logo"
+          width={24}
+          height={24}
+          className="rounded-md flex-shrink-0"
+        />
+        <span className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+          MTL Workers Union
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0">
         {backHref && (
           <Link
@@ -49,6 +65,8 @@ export default function AppHeader({ title, subtitle, backHref }: AppHeaderProps)
       >
         {loggingOut ? 'Logging out...' : 'Log out'}
       </button>
+      </div>
     </div>
   )
 }
+
