@@ -11,11 +11,13 @@ export default function AdminPage() {
   const [newPosition, setNewPosition] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [dataLoading, setDataLoading] = useState(true)
 
   async function loadPositions() {
     const res = await fetch('/api/admin/positions')
     const data = await res.json()
     if (res.ok) setPositions(data.positions)
+    setDataLoading(false)
   }
 
   useEffect(() => {
@@ -46,17 +48,22 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-10">
-      <div className="max-w-md mx-auto">
-        <AppHeader title="Admin" subtitle="Positions" />
-        <Link href="/admin/members" className="text-sm text-blue-900 font-medium block mb-4">
-          Manage members & roles →
-        </Link>
-        <Link href="/admin/summary" className="text-sm text-blue-900 font-medium block mb-4">
-          View vote summary →
-        </Link>
-        <Link href="/admin/audit" className="text-sm text-blue-900 font-medium block mb-4">View vote audit trail →</Link>
+    <div className="min-h-screen bg-slate-50 px-4 py-10 md:px-8">
+      <div className="max-w-md md:max-w-5xl mx-auto">
+        <AppHeader title="Admin" subtitle="Positions" showLogo />
+        <div className="flex flex-col md:flex-row md:items-center md:gap-5 mb-4">
+          <Link href="/admin/members" className="text-sm text-blue-900 font-medium block mb-4 md:mb-0 md:px-3 md:py-1.5 md:rounded-lg md:hover:bg-blue-50">
+            Manage members & roles →
+          </Link>
+          <Link href="/admin/summary" className="text-sm text-blue-900 font-medium block mb-4 md:mb-0 md:px-3 md:py-1.5 md:rounded-lg md:hover:bg-blue-50">
+            View vote summary →
+          </Link>
+          <Link href="/admin/audit" className="text-sm text-blue-900 font-medium block mb-4 md:mb-0 md:px-3 md:py-1.5 md:rounded-lg md:hover:bg-blue-50">View vote audit trail →</Link>
+        </div>
 
+        <div className="md:grid md:grid-cols-[380px_1fr] md:gap-8 md:items-start">
+
+        <div>
         <form onSubmit={handleAdd} className="flex gap-2 mb-6">
           <input
             type="text"
@@ -79,17 +86,45 @@ export default function AdminPage() {
             {error}
           </p>
         )}
+        </div>
 
-        <ul className="space-y-2">
-          {positions.map((p) => (
-            <li
-              key={p.id}
-              className="bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-900"
-            >
-              {p.name}
-            </li>
-          ))}
-        </ul>
+        {dataLoading ? (
+          <div className="space-y-2 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-white border border-slate-200 rounded-lg px-4 py-2.5 animate-pulse">
+                <div className="h-4 bg-slate-200 rounded w-1/2" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <ul className="space-y-2 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
+            {positions.map((p) => (
+              <li
+                key={p.id}
+                className="bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-900 flex items-center justify-between gap-3"
+              >
+                <span>{p.name}</span>
+                <button
+                  onClick={async () => {
+                    if (!confirm(`Remove position "${p.name}"?`)) return
+                    const res = await fetch(`/api/admin/positions/${p.id}`, { method: 'DELETE' })
+                    const data = await res.json()
+                    if (!res.ok) {
+                      setError(data.error)
+                      return
+                    }
+                    loadPositions()
+                  }}
+                  className="text-sm text-red-600 flex-shrink-0"
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        </div>
       </div>
     </div>
   )

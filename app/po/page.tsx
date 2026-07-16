@@ -107,16 +107,26 @@ export default function PresidingOfficerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6">
-      <div className="max-w-md mx-auto">
-        <AppHeader title="Add candidate" subtitle="Presiding officer" />
+    <div className="min-h-screen bg-slate-50 px-4 py-6 md:px-8 md:py-10">
+      <div className="max-w-md md:max-w-5xl mx-auto">
+        <AppHeader title="Add candidate" subtitle="Presiding officer" showLogo />
 
-        <Link href="/po/tally" className="text-sm text-blue-900 font-medium block mb-2">
-          Enter physical votes →
-        </Link>
-        <Link href="/po/session" className="text-sm text-blue-900 font-medium block mb-4">
-          Set voting session →
-        </Link>
+        <div className="flex flex-col md:flex-row md:items-center md:gap-5 mb-4 md:mb-6">
+          <Link
+            href="/po/tally"
+            className="text-sm text-blue-900 font-medium block mb-2 md:mb-0 md:px-3 md:py-1.5 md:rounded-lg md:hover:bg-blue-50"
+          >
+            Enter physical votes →
+          </Link>
+          <Link
+            href="/po/session"
+            className="text-sm text-blue-900 font-medium block mb-4 md:mb-0 md:px-3 md:py-1.5 md:rounded-lg md:hover:bg-blue-50"
+          >
+            Set voting session →
+          </Link>
+        </div>
+
+        <div className="md:grid md:grid-cols-[420px_1fr] md:gap-8 md:items-start">
 
         <form onSubmit={handleAdd} className="bg-white border border-slate-200 rounded-xl p-4 mb-8 space-y-4">
           <div>
@@ -220,9 +230,11 @@ export default function PresidingOfficerPage() {
             Add candidate
           </button>
         </form>
-<h2 className="text-lg font-semibold text-slate-900 mb-3">Candidates so far</h2>
+
+        <div>
+        <h2 className="text-lg font-semibold text-slate-900 mb-3">Candidates so far</h2>
         {dataLoading ? (
-          <div className="space-y-2">
+          <div className="space-y-2 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
             {[1, 2, 3].map((i) => (
               <div key={i} className="bg-white border border-slate-200 rounded-lg px-4 py-3 animate-pulse">
                 <div className="h-4 bg-slate-200 rounded w-1/2 mb-2" />
@@ -231,7 +243,7 @@ export default function PresidingOfficerPage() {
             ))}
           </div>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-2 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
             {candidates.map((c) => (
               <li key={c.id} className="bg-white border border-slate-200 rounded-lg px-4 py-3 flex items-center justify-between gap-3">
                 <div>
@@ -262,6 +274,9 @@ export default function PresidingOfficerPage() {
             )}
           </ul>
         )}
+        </div>
+
+        </div>
       </div>
     </div>
   )

@@ -20,6 +20,7 @@ export default function AdminMembersPage() {
   const [members, setMembers] = useState<Member[]>([])
   const [regions, setRegions] = useState<Region[]>([])
   const [error, setError] = useState('')
+  const [dataLoading, setDataLoading] = useState(true)
 
   useEffect(() => {
     fetch('/api/regions').then((r) => r.json()).then((d) => d.regions && setRegions(d.regions))
@@ -30,6 +31,7 @@ export default function AdminMembersPage() {
     const res = await fetch(`/api/admin/members?q=${encodeURIComponent(q)}`)
     const data = await res.json()
     if (res.ok) setMembers(data.members)
+    setDataLoading(false)
   }
 
   async function assignRole(employeeCode: string, role: string, regionId: number | null) {
@@ -57,16 +59,16 @@ export default function AdminMembersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6">
-      <div className="max-w-md mx-auto">
-        <AppHeader title="Members & roles" backHref="/admin" />
+    <div className="min-h-screen bg-slate-50 px-4 py-6 md:px-8 md:py-10">
+      <div className="max-w-md md:max-w-4xl mx-auto">
+        <AppHeader title="Members & roles" backHref="/admin" showLogo />
 
         <input
           type="text"
           value={query}
           onChange={(e) => { setQuery(e.target.value); search(e.target.value) }}
           placeholder="Search by name or employee ID"
-          className="w-full px-3 py-3 border border-slate-300 rounded-lg text-base text-slate-900 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-900"
+          className="w-full md:max-w-md px-3 py-3 border border-slate-300 rounded-lg text-base text-slate-900 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-900"
         />
 
         {error && (
@@ -75,7 +77,21 @@ export default function AdminMembersPage() {
           </p>
         )}
 
-        <ul className="space-y-3">
+        {dataLoading ? (
+          <div className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-white border border-slate-200 rounded-lg p-4 animate-pulse">
+                <div className="h-4 bg-slate-200 rounded w-1/2 mb-2" />
+                <div className="h-3 bg-slate-100 rounded w-1/3 mb-3" />
+                <div className="flex gap-2">
+                  <div className="h-6 w-20 bg-slate-100 rounded-full" />
+                  <div className="h-6 w-24 bg-slate-100 rounded-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+        <ul className="space-y-3 md:grid md:grid-cols-2 md:gap-3 md:space-y-0">
           {members.map((m) => {
             const isAdmin = m.member_roles.some((r) => r.role === 'admin')
             const poRole = m.member_roles.find((r) => r.role === 'presiding_officer')
@@ -127,6 +143,7 @@ export default function AdminMembersPage() {
             <p className="text-sm text-slate-500">No members found.</p>
           )}
         </ul>
+        )}
       </div>
     </div>
   )

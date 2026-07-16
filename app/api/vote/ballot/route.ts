@@ -44,9 +44,8 @@ const { data: regionData } = await supabaseServer
       myVotes
     })
   }
-
-  if (closesAt && now > closesAt) {
-    return NextResponse.json({ status: 'closed_no_vote' })
+if (opensAt && now < opensAt) {
+    return NextResponse.json({ status: 'not_open', opensAt: regionData?.voting_opens_at })
   }
 
   const { data: positions } = await supabaseServer
@@ -68,5 +67,10 @@ const { data: regionData } = await supabaseServer
   const drafts: Record<number, number> = {}
   draftRows?.forEach((d) => { drafts[d.position_id] = d.candidate_id })
 
-  return NextResponse.json({ status: 'open', positions: positionsForRegion, drafts })
+ return NextResponse.json({
+    status: 'open',
+    positions: positionsForRegion,
+    drafts,
+    closesAt: regionData?.voting_closes_at
+  })
 }

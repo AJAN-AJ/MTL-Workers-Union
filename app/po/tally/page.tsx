@@ -69,9 +69,9 @@ export default function TallyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6">
-      <div className="max-w-md mx-auto">
-        <AppHeader title="Physical vote entry" backHref="/po" />
+    <div className="min-h-screen bg-slate-50 px-4 py-6 md:px-8 md:py-10">
+      <div className="max-w-md md:max-w-5xl mx-auto">
+        <AppHeader title="Physical vote entry" backHref="/po" showLogo />
 
         {locked && (
           <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4">
@@ -80,7 +80,7 @@ export default function TallyPage() {
         )}
 
         {dataLoading ? (
-          <div className="space-y-4">
+          <div className="space-y-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:space-y-0">
             {[1, 2].map((i) => (
               <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 animate-pulse">
                 <div className="h-4 bg-slate-200 rounded w-1/3 mb-4" />
@@ -97,8 +97,9 @@ export default function TallyPage() {
           </div>
         ) : (
           <>
+            <div className="md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4">
             {positions.map((p) => (
-              <div key={p.id} className="bg-white border border-slate-200 rounded-xl p-4 mb-4">
+              <div key={p.id} className="bg-white border border-slate-200 rounded-xl p-4 mb-4 md:mb-0">
                 <h2 className="font-medium text-slate-900 mb-3">{p.name}</h2>
 
                 {p.candidates.map((c) => (
@@ -137,18 +138,20 @@ export default function TallyPage() {
                 </div>
               </div>
             ))}
+            </div>
 
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-4">
+              <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-4 mt-4">
                 {error}
               </p>
             )}
 
+            <div className="md:max-w-sm">
             {!locked && (
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="w-full bg-blue-900 text-white font-medium py-3 rounded-lg active:bg-blue-800 disabled:opacity-60"
+                className="w-full mt-4 bg-blue-900 text-white font-medium py-3 rounded-lg active:bg-blue-800 disabled:opacity-60"
               >
                 {submitting ? 'Submitting...' : 'Submit physical votes (cannot be edited after)'}
               </button>
@@ -168,6 +171,7 @@ export default function TallyPage() {
             >
               Release results
             </button>
+            </div>
           </>
         )}
       </div>

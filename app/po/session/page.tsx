@@ -42,9 +42,11 @@ async function handleSave() {
 }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6">
-      <div className="max-w-md mx-auto">
-        <AppHeader title="Voting session" backHref="/po" />
+    <div className="min-h-screen bg-slate-50 px-4 py-6 md:px-8 md:py-10">
+      <div className="max-w-md md:max-w-3xl mx-auto">
+        <AppHeader title="Voting session" backHref="/po" showLogo />
+
+        <div className="md:grid md:grid-cols-2 md:gap-6 md:items-start">
 
         <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-4">
           <div>
@@ -76,7 +78,9 @@ async function handleSave() {
           >
             {saving ? 'Saving...' : 'Save voting window'}
           </button>
-          <div className="mt-6">
+        </div>
+
+        <div className="mt-6 md:mt-0 bg-white border border-slate-200 rounded-xl p-4">
   <button
     onClick={async () => {
       if (!confirm('This archives the current session and clears candidates/votes for a fresh one. Continue?')) return
@@ -95,6 +99,7 @@ async function handleSave() {
     Only works after results have been released. Past candidates and votes are saved as a summary, then cleared for the next round.
   </p>
 </div>
+
         </div>
       </div>
     </div>
