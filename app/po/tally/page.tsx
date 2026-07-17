@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import AppHeader from '@/app/components/AppHeader'
 
@@ -8,6 +8,8 @@ type Candidate = { id: number; name: string; onlineCount: number; physicalCount:
 type Position = { id: number; name: string; candidates: Candidate[]; nullVoidCount: number | null }
 
 export default function TallyPage() {
+  const [releasedResults, setReleasedResults] = useState<{ regionName: string; winners: any[] } | null>(null)
+const canvasRef = useRef<HTMLCanvasElement>(null)
   const [positions, setPositions] = useState<Position[]>([])
   const [locked, setLocked] = useState(false)
   const [physicalInputs, setPhysicalInputs] = useState<Record<string, string>>({})
@@ -158,14 +160,14 @@ export default function TallyPage() {
             )}
 
             <button
-              onClick={async () => {
-                const res = await fetch('/api/po/release-results', { method: 'POST' })
-                const data = await res.json()
-                if (!res.ok) { setError(data.error); return }
-                setError('')
-                alert('Results released and emails sent.')
-                load()
-              }}
+            onClick={async () => {
+  const res = await fetch('/api/po/release-results', { method: 'POST' })
+  const data = await res.json()
+  if (!res.ok) { setError(data.error); return }
+  setError('')
+  setReleasedResults({ regionName: data.regionName, winners: data.winners })
+  load()
+}}
               disabled={!locked}
               className="w-full mt-4 bg-green-700 text-white font-medium py-3 rounded-lg active:bg-green-800 disabled:opacity-40"
             >

@@ -29,7 +29,7 @@ export async function GET() {
 
   const { data: nullVoidRows } = await supabaseServer
     .from('null_void_votes')
-    .select('region_id, position_id, null_count, void_count')
+    .select('region_id, position_id, null_void_count')
 
   const { data: regionResults } = await supabaseServer
     .from('region_results')
@@ -50,8 +50,7 @@ const result = (regions || []).map((region: any) => ({
         return {
           id: p.id,
           name: p.name,
-          nullCount: nv?.null_count ?? 0,
-          voidCount: nv?.void_count ?? 0,
+          nullVoidCount: nv?.null_void_count ?? 0,
           candidates: candidatesInRegion.map((c: any) => {
             const online = votes?.filter(
               (v) => v.region_id === region.id && v.position_id === p.id && v.candidate_id === c.id

@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
         .filter((e: any) => e.positionId === positionId)
         .reduce((sum: number, e: any) => sum + Number(e.physicalCount || 0), 0)
       const nv = nullVoid.find((n: any) => n.positionId === positionId)
-      const nullVoidSum = Number(nv?.nullCount || 0) + Number(nv?.voidCount || 0)
+      const nullVoidSum = Number(nv?.count || 0)
       const onlineCount = onlineVotes?.filter((v) => v.position_id === positionId).length ?? 0
 
       const total = physicalSum + nullVoidSum + onlineCount
