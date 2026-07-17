@@ -32,12 +32,12 @@ export default function AppHeader({ title, subtitle, backHref, showLogo }: AppHe
         <Image
           src="/icon.png"
           alt="MTL Workers Union logo"
-          width={24}
-          height={24}
+          width={32}
+          height={32}
           className="rounded-md flex-shrink-0"
         />
         <span className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-          MTL Workers Union
+          MTL Workers Union Voting Portal
         </span>
       </div>
 

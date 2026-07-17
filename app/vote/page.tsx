@@ -7,7 +7,7 @@ type Candidate = { id: number; name: string; image_url: string | null }
 type Position = { id: number; name: string; candidates: Candidate[] }
 type MyVote = { position_id: number; candidate_id: number; positions: { name: string }; candidates: { name: string } }
 type ResultCandidate = { id: number; name: string; total: number; isWinner: boolean }
-type ResultPosition = { id: number; name: string; candidates: ResultCandidate[]; nullCount: number; voidCount: number }
+type ResultPosition = { id: number; name: string; candidates: ResultCandidate[]; nullvoidCount: number }
 
 function useCountdown(target: string | null, onExpire?: () => void) {
   const [remaining, setRemaining] = useState('')
@@ -113,9 +113,23 @@ export default function VotePage() {
     loadBallot()
   }
 
-  if (status === 'loading') {
-    return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500">Loading...</div>
-  }
+if (status === 'loading') {
+  return (
+    <div className="fixed inset-0 flex items-center flex-col justify-center bg-white">
+      <div className="relative w-32 h-32 flex items-center justify-center">
+        <span className="absolute inset-0 rounded-full border-4 border-blue-100 border-t-blue-900 animate-spin" />
+        <img
+          src="/union-logo.gif"
+          alt="MTL Workers Union"
+          className="w-24 h-24 object-contain rounded-full"
+        />
+        
+      </div>
+       <h1 className="text-xl font-semibold text-slate-900">MTL WORKERS UNION</h1>
+       <p className="text-sm text-slate-500 mt-1">Voting portal</p>
+    </div>
+  );
+}
 
   if (status === 'error') {
     return (
@@ -238,8 +252,8 @@ export default function VotePage() {
                     </div>
                   ))}
                   <div className="flex justify-between text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">
-                    <span>Null: {p.nullCount}</span>
-                    <span>Void: {p.voidCount}</span>
+                    <span>Null & Void: {p.nullvoidCount}</span>
+                    
                   </div>
                 </div>
               )
