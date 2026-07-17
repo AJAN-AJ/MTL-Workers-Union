@@ -73,9 +73,9 @@ const { data: regionData } = await supabaseServer
         .select('position_id, candidate_id, vote_count')
         .eq('region_id', member.region_id)
 
-      const { data: nullVoidRows } = await supabaseServer
+ const { data: nullVoidRows } = await supabaseServer
         .from('null_void_votes')
-        .select('position_id, null_count, void_count')
+        .select('position_id, null_void_count')
         .eq('region_id', member.region_id)
 
       const results = (positions || [])
@@ -98,8 +98,7 @@ const { data: regionData } = await supabaseServer
             id: p.id,
             name: p.name,
             candidates,
-            nullCount: nv?.null_count ?? 0,
-            voidCount: nv?.void_count ?? 0
+            nullvoidCount: nv?.null_void_count ?? 0
           }
         })
         .filter(Boolean)

@@ -318,7 +318,7 @@ if (status === 'loading') {
                 <li key={p.id} className="bg-white border border-slate-200 rounded-lg px-4 py-3 flex justify-between items-center">
                   <div>
                     <p className="text-sm text-slate-500">{p.name}</p>
-                    <p className="font-medium text-slate-900">{chosen?.name}</p>
+                    <p className="font-medium text-slate-900">{chosen?.name ?? <span className="text-slate-400 italic">Not voted</span>}</p>
                   </div>
                   <button onClick={() => setReviewing(false)} className="text-sm text-blue-900 font-medium">
                     Edit
@@ -419,7 +419,6 @@ if (status === 'loading') {
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4">
           <button
             onClick={() => setReviewing(true)}
-            disabled={!allSelected}
             className="w-full max-w-sm md:max-w-md mx-auto block bg-blue-900 text-white font-medium py-3 rounded-lg active:bg-blue-800 disabled:opacity-40"
           >
             Review & submit

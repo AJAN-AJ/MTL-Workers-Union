@@ -58,6 +58,22 @@ export default function AdminMembersPage() {
     search(query)
   }
 
+  async function resetPassword(employeeCode: string, name: string) {
+    if (!confirm(`Reset the password for ${name}? They'll need to set a new one next time they log in.`)) return
+    setError('')
+    const res = await fetch('/api/admin/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ employeeCode })
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      setError(data.error)
+      return
+    }
+    alert(`Password reset for ${name}.`)
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-6 md:px-8 md:py-10">
       <div className="max-w-md md:max-w-4xl mx-auto">
@@ -135,6 +151,12 @@ export default function AdminMembersPage() {
                       + Make PO ({m.regions?.name})
                     </button>
                   )}
+                  <button
+                  onClick={() => resetPassword(m.employee_code, `${m.first_name} ${m.surname}`)}
+                  className="text-xs text-slate-500 mt-2 underline"
+                >
+                  Reset password
+                </button>
                 </div>
               </li>
             )
