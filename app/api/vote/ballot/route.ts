@@ -85,7 +85,7 @@ export async function GET() {
           .map((c: any) => {
             const online = regionVotes?.filter((v) => v.position_id === p.id && v.candidate_id === c.id).length ?? 0
             const physical = physicalRows?.find((r) => r.position_id === p.id && r.candidate_id === c.id)?.vote_count ?? 0
-            return { id: c.id, name: c.name, total: online + physical, isWinner: c.id === winnerCandidateId }
+            return { id: c.id, name: c.name, online, physical, total: online + physical, isWinner: c.id === winnerCandidateId }
           })
           .sort((a: any, b: any) => b.total - a.total)
 

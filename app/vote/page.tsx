@@ -6,8 +6,8 @@ import AppHeader from '@/app/components/AppHeader'
 type Candidate = { id: number; name: string; image_url: string | null }
 type Position = { id: number; name: string; candidates: Candidate[] }
 type MyVote = { position_id: number; candidate_id: number; positions: { name: string }; candidates: { name: string } }
-type ResultCandidate = { id: number; name: string; total: number; isWinner: boolean }
-type ResultPosition = { id: number; name: string; candidates: ResultCandidate[]; nullvoidCount: number }
+type ResultCandidate = { id: number; online: number; physical: number; name: string; total: number; isWinner: boolean }
+type ResultPosition = { id: number; name: string;  candidates: ResultCandidate[]; nullvoidCount: number }
 
 function useCountdown(target: string | null, onExpire?: () => void) {
   const [remaining, setRemaining] = useState('')
@@ -231,25 +231,34 @@ if (status === 'loading') {
                 <div key={p.id} className="bg-white border border-slate-200 rounded-xl p-4 mb-4 md:mb-0">
                   <h2 className="font-medium text-slate-900 mb-3">{p.name}</h2>
                   {p.candidates.map((c) => (
-                    <div
-                      key={c.id}
-                      className={`flex items-center justify-between py-1.5 border-b border-slate-100 last:border-0 ${
-                        myPick?.candidate_id === c.id ? 'font-medium text-slate-900' : 'text-slate-700'
-                      }`}
-                    >
-                      <span className="text-sm flex items-center gap-2">
-                        {c.name}
-                        {c.isWinner && (
-                          <span className="text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2 py-0.5">
-                            Winner
-                          </span>
-                        )}
-                        {myPick?.candidate_id === c.id && (
-                          <span className="text-xs text-blue-900">(your vote)</span>
-                        )}
-                      </span>
-                      <span className="text-sm tabular-nums text-slate-600">{c.total} votes</span>
-                    </div>
+                    <details key={c.id} className="group border-b border-slate-100 last:border-0 py-1.5">
+                      <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer flex items-center justify-between gap-2 select-none">
+                        <span
+                          className={`text-sm flex items-center gap-2 flex-wrap ${
+                            myPick?.candidate_id === c.id ? 'font-medium text-slate-900' : 'text-slate-700'
+                          }`}
+                        >
+                          {c.name}
+                          {c.isWinner && (
+                            <span className="text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2 py-0.5">
+                              Winner
+                            </span>
+                          )}
+                          {myPick?.candidate_id === c.id && (
+                            <span className="text-xs text-blue-900">(your vote)</span>
+                          )}
+                        </span>
+                        <span className="flex items-center gap-2 flex-shrink-0">
+                          <span className="text-sm tabular-nums text-slate-600">{c.total} votes</span>
+                          <span className="text-xs text-blue-900 font-medium">Detailed</span>
+                          <span className="text-slate-400 text-xs transition-transform group-open:rotate-180">▾</span>
+                        </span>
+                      </summary>
+                      <div className="mt-1.5 flex gap-4 text-xs text-slate-500">
+                        <span>Online: {c.online}</span>
+                        <span>Physical: {c.physical}</span>
+                      </div>
+                    </details>
                   ))}
                   <div className="flex justify-between text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">
                     <span>Null & Void: {p.nullvoidCount}</span>
